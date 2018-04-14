@@ -1,9 +1,14 @@
 from time import sleep
+from flask import Flask, redirect, render_template, request
+from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
 
-def main():
-    while True:
-        print("Hello world")
-        sleep(10)
 
-if __name__ == '__main__':
-    main()
+# Initialize app
+
+app = Flask(__name__)
+
+@app.route('/health')
+def healthcheck():
+    return 'OK'
+
