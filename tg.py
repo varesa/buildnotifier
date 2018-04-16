@@ -1,3 +1,4 @@
+import json
 import os
 from telegram.ext import Updater, CommandHandler
 
@@ -8,6 +9,7 @@ class Tg:
 
         self.full = []
         self.builds = []
+        self.load_chats()
 
         # Initialize the telegram API
         self.updater = Updater(token=os.environ['TELEGRAM_TOKEN'])
@@ -31,6 +33,18 @@ class Tg:
         self.logger.info("Sending instructions")
 
         bot.send_message(chat_id=update.message.chat_id, text="Hello. Type /builds to receive build status notifications or /full to get full build information")
+
+    def save_chats(self):
+        with open("/data/chats", 'w') as file:
+            json.dump({'full': self.full, 'builds': self.builds}, file)
+            self.logger.info("Saving chat_ids to file")
+
+    def load_chats(self):
+        with open("/data/chats", 'r') as file:
+            data = json.load(file)
+            self.full = data['full']
+            self.builds = data['builds']
+            self.logger.info("Loaded the following chat_ids from file: " + str(self.full) + ", " + str(self.builds))
 
     # Telegram command handlers
 
