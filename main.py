@@ -8,6 +8,8 @@ from time import sleep
 # Logging #
 ###########
 
+LOG_LEVEL = logging.DEBUG
+
 logger = logging.getLogger("buildnotifier")
 logger.setLevel(LOG_LEVEL)
 handler = logging.StreamHandler()
