@@ -9,6 +9,7 @@ app = Flask(__name__)
 @app.route('/post', methods=['POST'])
 def post():
     print(request.form)
+    return ''
 
 @app.route('/health')
 def healthcheck():
