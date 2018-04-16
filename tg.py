@@ -18,9 +18,11 @@ class Tg:
 
         # Register the command handlers
         start_handler = CommandHandler('start', self.start)
+        builds_handler = CommandHandler('builds', self.register_builds)
         full_handler = CommandHandler('full', self.register_full)
         unregister_handler = CommandHandler('off', self.unregister)
         self.dispatcher.add_handler(start_handler)
+        self.dispatcher.add_handler(builds_handler)
         self.dispatcher.add_handler(full_handler)
         self.dispatcher.add_handler(unregister_handler)
 
