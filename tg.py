@@ -109,8 +109,7 @@ class Tg:
                 testAction = action
 
         for chat_id in set(self.full + self.builds):
-            self.bot.send_message(chat_id=chat_id, text="Build #" + str(data['id'])
-                                                        + " status: " + data['result']
-                                                        + ", url: " + url)
+            self.bot.send_message(chat_id=chat_id, text="Build #" + str(data['id']) + " " 
+                                                        + data['result'] + " (" + url + ")")
             if testAction.get('failCount', 0) != 0:
                 self.bot.send_message(chat_id=chat_id, text="Tests failed: " + str(testAction['failCount']))
