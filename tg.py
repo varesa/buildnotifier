@@ -108,8 +108,9 @@ class Tg:
             if action.get('_class', '') == "hudson.tasks.junit.TestResultAction":
                 testAction = action
 
+        msg = "Build #" + str(data['id']) + " " + data['result'] + " (" + url + ")."
+        if testAction.get('failCount', 0) != 0:
+            msg += " Tests failed: " + str(testAction['failCount'])
+
         for chat_id in set(self.full + self.builds):
-            self.bot.send_message(chat_id=chat_id, text="Build #" + str(data['id']) + " " 
-                                                        + data['result'] + " (" + url + ")")
-            if testAction.get('failCount', 0) != 0:
-                self.bot.send_message(chat_id=chat_id, text="Tests failed: " + str(testAction['failCount']))
+            self.bot.send_message(chat_id=chat_id, text=msg)
