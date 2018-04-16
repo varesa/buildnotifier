@@ -19,8 +19,10 @@ class Tg:
         # Register the command handlers
         start_handler = CommandHandler('start', self.start)
         full_handler = CommandHandler('full', self.register_full)
+        unregister_handler = CommandHandler('off', self.unregister)
         self.dispatcher.add_handler(start_handler)
         self.dispatcher.add_handler(full_handler)
+        self.dispatcher.add_handler(unregister_handler)
 
         logger.info("Starting telegram polling")
         self.updater.start_polling()
@@ -53,13 +55,36 @@ class Tg:
 
     def register_full(self, bot, update):
         self.logger.info("Received /full. Chat ID: " + str(update.message.chat_id))
-        self.full.append(update.message.chat_id)
+        if update.message.chat_id not in self.full:
+            self.logger.info("Adding ID to full")
+            self.full.append(update.message.chat_id)
+        if update.message.chat_id in self.builds:
+            self.logger.info("Removing ID from builds")
+            self.builds.remove(update.message.chat_id)
+        self.save_chats()
         bot.send_message(chat_id=update.message.chat_id, text="You will now receive full build information. Type /off to disable")
 
     def register_builds(self, bot, update):
         self.logger.info("Received /builds. Chat ID: " + str(update.message.chat_id))
-        self.builds.append(update.message.chat_id)
+        if update.message.chat_id not in self.builds:
+            self.logger.info("Adding ID to builds")
+            self.builds.append(update.message.chat_id)
+        if update.message.chat_id in self.full:
+            self.logger.info("Removing ID from full")
+            self.full.remove(update.message.chat_id)
+        self.save_chats()
         bot.send_message(chat_id=update.message.chat_id, text="You will now receive short build information. Type /off to disable")
+
+    def unregister(self, bot, update):
+        self.logger.info("Received /off. Chat ID: " + str(update.message.chat_id))
+        if update.message.chat_id in self.builds:
+            self.logger.info("Removing ID from builds")
+            self.builds.remove(update.message.chat_id)
+        if update.message.chat_id in self.full:
+            self.logger.info("Removing ID from full")
+            self.full.remove(update.message.chat_id)
+        self.save_chats()
+        bot.send_message(chat_id=update.message.chat_id, text="You should no longer receive updates")
 
     # Wrappers to send specific messages
 
