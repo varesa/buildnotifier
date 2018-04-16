@@ -1,6 +1,6 @@
+from flask import Flask, request
 import logging
 from tg import Tg
-from http import Http
 
 
 LOG_LEVEL = logging.DEBUG
@@ -13,20 +13,28 @@ handler.setFormatter(logging.Formatter('%(asctime)s - %(name)s - %(levelname)s -
 logger.addHandler(handler)
 
 
-logger.info("Starting")
-Tg(logger=logger)
+logger.info("Starting tg")
+tg = Tg(logger=logger)
+
+logger.info("Starting flask")
+app = Flask(__name__)
 
 
-def callback(data):
+@app.route('/post', methods=['POST'])
+def post():
+    data = request.json
     if data['type'] == 'build':
         logger.info('Data received: Starting build: ' + data['tag'])
-        Tg.send_build(data['tag'])
+        tg.send_build(data['tag'])
     if data['type'] == 'stage':
         logger.info('Data received: Running stage: ' + data['stage'])
-        Tg.send_stage(data['stage'])
+        tg.send_stage(data['stage'])
     if data['type'] == 'complete':
         logger.info('Data received: Build complete: ' + data['url'])
-        Tg.send_complete(data['url'])
+        tg.send_complete(data['url'])
+    return ''
 
 
-Http(logger=logger, callback=callback)
+@app.route('/health')
+def healthcheck():
+    return 'OK'
