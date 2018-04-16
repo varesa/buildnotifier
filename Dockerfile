@@ -8,4 +8,4 @@ ENV LANG=en_US.utf-8 LC_ALL=en_US.utf-8 FLASK_APP=main.py
 COPY . /app
 WORKDIR /app
 
-CMD ["pyhton3", "-u", "main.py"]
+CMD ["python3", "-u", "main.py"]
