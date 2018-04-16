@@ -40,11 +40,14 @@ class Tg:
             self.logger.info("Saving chat_ids to file")
 
     def load_chats(self):
-        with open("/data/chats", 'r') as file:
-            data = json.load(file)
-            self.full = data['full']
-            self.builds = data['builds']
-            self.logger.info("Loaded the following chat_ids from file: " + str(self.full) + ", " + str(self.builds))
+        try:
+            with open("/data/chats", 'r') as file:
+                data = json.load(file)
+                self.full = data['full']
+                self.builds = data['builds']
+                self.logger.info("Loaded the following chat_ids from file: " + str(self.full) + ", " + str(self.builds))
+        except FileNotFoundError:
+            self.logger.info("Unable to load chat_ids, going with empty defaults")
 
     # Telegram command handlers
 
