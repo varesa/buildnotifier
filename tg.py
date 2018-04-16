@@ -100,17 +100,17 @@ class Tg:
             self.bot.send_message(chat_id=chat_id, text="Build entered stage " + stage)
 
     def send_complete(self, url):
-        r = requests.get(url)
+        r = requests.get(url + "api/json")
 
         data = r.json()
         testAction = {}
         for action in data['actions']:
-            if action.get('_class', default='') == "hudson.tasks.junit.TestResultAction":
+            if action.get('_class', '') == "hudson.tasks.junit.TestResultAction":
                 testAction = action
 
         for chat_id in set(self.full + self.builds):
             self.bot.send_message(chat_id=chat_id, text="Build #" + str(data['id'])
                                                         + " status: " + data['result']
                                                         + ", url: " + url)
-            if testAction.get('failCount', default=0) != 0:
+            if testAction.get('failCount', 0) != 0:
                 self.bot.send_message(chat_id=chat_id, text="Tests failed: " + str(testAction['failCount']))
