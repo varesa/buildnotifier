@@ -46,6 +46,7 @@ token = os.environ['TELEGRAM_TOKEN']
 # Initialize the telegram API
 updater = Updater(token=token)
 dispatcher = updater.dispatcher
+bot = updater.bot
 
 # Register the command handlers
 start_handler = CommandHandler('start', start)
