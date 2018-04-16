@@ -8,7 +8,12 @@ app = Flask(__name__)
 
 @app.route('/post', methods=['POST'])
 def post():
-    print(request.form)
+    data = request.json
+    if data['type'] == 'stage':
+        print('Running stage: ' + data['stage'])
+
+    if data['type'] == 'complete':
+        print('Build complete: ' + data['url'])
     return ''
 
 @app.route('/health')
