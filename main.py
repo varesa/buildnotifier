@@ -1,7 +1,7 @@
 from flask import Flask, request
 import logging
 from tg import Tg
-
+from time import sleep
 
 LOG_LEVEL = logging.DEBUG
 
@@ -31,6 +31,7 @@ def post():
         tg.send_stage(data['stage'])
     if data['type'] == 'complete':
         logger.info('Data received: Build complete: ' + data['url'])
+        sleep(0.75)
         tg.send_complete(data['url'])
     return ''
 
